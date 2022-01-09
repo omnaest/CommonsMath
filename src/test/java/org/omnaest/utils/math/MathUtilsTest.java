@@ -4,6 +4,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+import org.omnaest.utils.math.MathUtils.OneFactorDeviationNormalizer;
 import org.omnaest.utils.math.domain.DataPoints.Buckets;
 import org.omnaest.utils.math.domain.SplittedDataPoints;
 
@@ -51,6 +52,18 @@ public class MathUtilsTest
                                                                  .toDoubleArray(),
                           0.001);
 
+    }
+
+    @Test
+    public void testNormalize() throws Exception
+    {
+        OneFactorDeviationNormalizer normalizer = MathUtils.normalize()
+                                                           .byOneFactorDeviation()
+                                                           .acceptAll(1.2, 2.0, 0.5)
+                                                           .withDeviationLimit(10.0);
+        assertEquals(10.0, normalizer.applyAsDouble(2.0), 0.01);
+        assertEquals(1.0, normalizer.applyAsDouble(1.0), 0.01);
+        assertEquals(0.1, normalizer.applyAsDouble(0.5), 0.01);
     }
 
 }
